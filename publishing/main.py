@@ -110,7 +110,7 @@ print("=========================================================================
 # client.publish('Bojong' if laundry_choice == '1' else 'Soang', current_time.strftime("%Y-%m-%d %H:%M:%S"))
 # print(f"Pengambilan Baju di Laundry {'Bojong' if laundry_choice == '1' else 'Soang'} pada waktu:", current_time.strftime("%Y-%m-%d %H:%M:%S"))
 
-pesan = (current_time + datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
+pesan = (current_time + datetime.timedelta(days=int(processing_time_choice))).strftime("%Y-%m-%d %H:%M:%S")
 client.publish(topik, pesan)
 
 time.sleep(30)
