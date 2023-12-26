@@ -21,7 +21,7 @@ class Laundry:
             if client in self.followers:
                 print("==============================================================\n")
                 print(f"{self.name} Mengirim informasi penjempulan ke {client}\n")
-                print(f"laundry {self.name} akan di ambil pada tanggal {date_pickup} pukul {time_pickup}\n")
+                print(f"{self.name} akan di ambil pada tanggal {date_pickup} pukul {time_pickup}\n")
                 print("==============================================================")
             else:
                 print(f"{client} anda tidak mengikuti {self.name}. Silakan ikuti untuk menerima pembaruan.")
@@ -32,7 +32,7 @@ class Laundry:
         with self.lock:
             if client in self.followers:
                 print(f"{self.name} Mengirim informasi pengantaran ke {client}\n")
-                print(f"laundry {self.name} akan di antar pada tanggal {date_delivery} pukul {time_delivery}\n")
+                print(f"{self.name} akan di antar pada tanggal {date_delivery} pukul {time_delivery}\n")
                 print("==============================================================")
             else:
                 print(f"{client} anda tidak mengikuti {self.name}. Silakan ikuti untuk menerima pembaruan.")
