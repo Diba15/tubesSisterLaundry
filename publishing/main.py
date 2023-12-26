@@ -31,10 +31,12 @@ inputUser = input('Masukkan pilihan: ')
 
 if inputUser == '1':
     print("Mengikuti Laundry", "Bojong")
-    client.subscribe("bojong")
+    client.subscribe("waktu_penjemputan_bojong")
+    client.subscribe("waktu_pengantaran_bojong")
 elif inputUser == '2':
     print("Mengikuti Laundry", "Soang")
-    client.subscribe("soang")
+    client.subscribe("waktu_penjemputan_soang")
+    client.subscribe("waktu_pengantaran_soang")
 
 
 client.loop_stop()
@@ -43,16 +45,16 @@ client.loop_stop()
 current_time = datetime.datetime.now()
 
 if inputUser == '1':
-    client.publish("waktu_penjemputan", current_time.strftime("%Y-%m-%d %H:%M:%S"))
+    client.publish("waktu_penjemputan_bojong", current_time.strftime("%Y-%m-%d %H:%M:%S"))
     print("Pengambilan Baju di Laundry Bojong pada waktu:", current_time.strftime("%Y-%m-%d %H:%M:%S"))
-    client.publish("waktu_pengantaran", (current_time + datetime.timedelta(days=2)).strftime("%Y-%m-%d %H:%M:%S"))
+    client.publish("waktu_pengantaran_bojong", (current_time + datetime.timedelta(days=2)).strftime("%Y-%m-%d %H:%M:%S"))
     time.sleep(5)
     print("Pengantaran Baju di Laundry Bojong pada waktu:",
           (current_time + datetime.timedelta(days=2)).strftime("%Y-%m-%d %H:%M:%S"))
 elif inputUser == '2':
-    client.publish("waktu_penjemputan", current_time.strftime("%Y-%m-%d %H:%M:%S"))
+    client.publish("waktu_penjemputan_soang", current_time.strftime("%Y-%m-%d %H:%M:%S"))
     print("Pengambilan Baju di Laundry Soang pada waktu:", current_time.strftime("%Y-%m-%d %H:%M:%S"))
     time.sleep(5)
-    client.publish("waktu_pengantaran", (current_time + datetime.timedelta(days=2)).strftime("%Y-%m-%d %H:%M:%S"))
+    client.publish("waktu_pengantaran_soang", (current_time + datetime.timedelta(days=2)).strftime("%Y-%m-%d %H:%M:%S"))
     print("Pengantaran Baju di Laundry Soang pada waktu:",
           (current_time + datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S"))
