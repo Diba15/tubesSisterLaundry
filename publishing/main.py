@@ -9,22 +9,22 @@ def on_message(client, userdata, message):
 
 def get_laundry_choice():
     print("""
-        ====================[M E N U]====================
-        Pilih Laundry yang ingin digunakan
-        1. Laundry Bojong
-        2. Laundry Soang
-        =================================================
-        """)
+======================[M E N U]======================
+Pilih Laundry yang ingin digunakan
+1. Laundry Bojong
+2. Laundry Soang
+=====================================================
+""")
     return input('Masukkan pilihan: ')
 
 
 def get_service_type():
     print("""
-===========[Jenis Laundry]==========
+==================[Jenis Laundry]====================
 Pilih jenis laundry:
 1. Cuci Basah
 2. Cuci Kering
-===================================
+=====================================================
 """)
     return input('Masukkan pilihan         : ')
 
