@@ -32,17 +32,23 @@ def menu():
             laundry_bojong.send_pickup_info(client_name)
             time.sleep(3) 
             laundry_bojong.send_delivery_info(client_name)
+            print("Menggunakan metode kering basah di Laundry Bojong untuk", client_name)
         elif laundry_action == '2':
+            client_name = input('Masukkan nama Anda: ')
+            laundry_bojong.follow_client(client_name)
+            laundry_bojong.send_pickup_info(client_name)
+            time.sleep(3) 
+            laundry_bojong.send_delivery_info(client_name)
             # Tindakan untuk Cuci Basah di Laundry Bojong
-            pass
+            print("Menggunakan metode cuci basah di Laundry Bojong untuk", client_name)
         elif laundry_action == '3':
             print('Exit')
         else:
             print('Pilihan tidak ada')
 
     elif inputUser == '2':
-        print(
-        """=================[Laundry Soang]=================
+        print("""
+        =================[Laundry Soang]=================
         Pilih Laundry yang mau digunakan
         1. Cuci Kering
         2. Cuci Basah
@@ -56,9 +62,15 @@ def menu():
             laundry_soang.send_pickup_info(client_name)
             time.sleep(3)  # Simulating laundry process time
             laundry_soang.send_delivery_info(client_name)
+            print("Menggunakan metode cuci kering di Laundry Soang untuk", client_name)
         elif laundry_action == '2':
-            # Tindakan untuk Cuci Basah di Laundry Soang
-            pass
+            client_name = input('Masukkan nama Anda: ')
+            laundry_soang.follow_client(client_name)
+            laundry_soang.send_pickup_info(client_name)
+            time.sleep(3)
+            laundry_soang.send_delivery_info(client_name)
+            print("Menggunakan metode cuci basah di Laundry Soang untuk", client_name)
+
         elif laundry_action == '3':
             print('Exit')
         else:
