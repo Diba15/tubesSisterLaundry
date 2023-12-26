@@ -2,59 +2,57 @@ import paho.mqtt.client as mqtt
 import time
 import datetime
 
+# Dapatkan waktu saat ini
+current_time = datetime.datetime.now()
+
 
 def on_message(client, userdata, message):
-    print('Info Waktu:', str(message.payload.decode("utf-8")))
+    print(
+        f"Pesanan Laundry {message.topic} dengan penjemputan baju kotor {current_time.strftime('%Y-%m-%d %H:%M:%S')} dan perkiraan pengantaran {message.payload.decode()}")
+
+
+# def on_publish(client, userdata, mid):
+#     print("Message {} published.".format(mid))
 
 
 # alamat broker yang akan digunakan
 broker_address = "0.tcp.ap.ngrok.io"
 # buat client bernama P1
 print("creating new instance")
-client = mqtt.Client("Musrik")
+client = mqtt.Client()
 # pada client dikaitkan callback function
 client.on_message = on_message
+# client.on_publish = on_publish
 # client terkoneksi dengan broker
 print("connecting to broker")
 client.connect(broker_address, port=19536)
-# client P1 mulai
 client.loop_start()
-# client P1 subscribe ke topik "info_waktu" # P1 <- broker
 print("""
         ====================[M E N U]====================
         Pilih Laundry yang ingin digunakan
-        1. Laundry Bojong
-        2. Laundry Soang
+        1. Laundry Bojong (Pengantaran 1 Hari)
+        2. Laundry Soang (Pengantaran 2 Hari)
         =================================================
         """)
 inputUser = input('Masukkan pilihan: ')
 
+topik = ""
 if inputUser == '1':
     print("Mengikuti Laundry", "Bojong")
-    client.subscribe("waktu_penjemputan_bojong")
-    client.subscribe("waktu_pengantaran_bojong")
+    topik = "Bojong"
 elif inputUser == '2':
     print("Mengikuti Laundry", "Soang")
-    client.subscribe("waktu_penjemputan_soang")
-    client.subscribe("waktu_pengantaran_soang")
+    topik = "Soang"
 
-
-client.loop_stop()
-
-# Dapatkan waktu saat ini
-current_time = datetime.datetime.now()
+client.subscribe(topik)
 
 if inputUser == '1':
-    client.publish("waktu_penjemputan_bojong", current_time.strftime("%Y-%m-%d %H:%M:%S"))
-    print("Pengambilan Baju di Laundry Bojong pada waktu:", current_time.strftime("%Y-%m-%d %H:%M:%S"))
-    client.publish("waktu_pengantaran_bojong", (current_time + datetime.timedelta(days=2)).strftime("%Y-%m-%d %H:%M:%S"))
-    time.sleep(5)
-    print("Pengantaran Baju di Laundry Bojong pada waktu:",
-          (current_time + datetime.timedelta(days=2)).strftime("%Y-%m-%d %H:%M:%S"))
+    pesan = (current_time + datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
+    client.publish(topik, pesan)
 elif inputUser == '2':
-    client.publish("waktu_penjemputan_soang", current_time.strftime("%Y-%m-%d %H:%M:%S"))
-    print("Pengambilan Baju di Laundry Soang pada waktu:", current_time.strftime("%Y-%m-%d %H:%M:%S"))
-    time.sleep(5)
-    client.publish("waktu_pengantaran_soang", (current_time + datetime.timedelta(days=2)).strftime("%Y-%m-%d %H:%M:%S"))
-    print("Pengantaran Baju di Laundry Soang pada waktu:",
-          (current_time + datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S"))
+    pesan = (current_time + datetime.timedelta(days=2)).strftime("%Y-%m-%d %H:%M:%S")
+    client.publish(topik, pesan)
+
+time.sleep(30)
+
+client.loop_stop()
