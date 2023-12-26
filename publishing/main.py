@@ -2,9 +2,13 @@ import paho.mqtt.client as mqtt
 import time
 import datetime
 
+# Dapatkan waktu saat ini
+current_time = datetime.datetime.now()
+
 
 def on_message(client, userdata, message):
-    print('Info Waktu:', str(message.payload.decode("utf-8")))
+    print(
+        f"Pesanan Laundry {message.topic} dengan pengambilan baju {current_time.strftime('%Y-%m-%d %H:%M:%S')} dan perkiraan pengantaran {message.payload.decode()}")
 
 
 def get_laundry_choice():
@@ -53,23 +57,24 @@ def get_customer_details():
     return name, weight
 
 
-broker_address = "0.tcp.ap.ngrok.io"
+broker_address = "localhost"
 print("Creating new instance")
-client = mqtt.Client("Musrik")
+client = mqtt.Client()
 client.on_message = on_message
 print("Connecting to broker")
-client.connect(broker_address, port=19536)
+client.connect(broker_address, port=3333)
 client.loop_start()
 
 laundry_choice = get_laundry_choice()
+topik = ""
 if laundry_choice == '1':
     print("Mengikuti Laundry Bojong")
-    client.subscribe("bojong")
+    topik = "Bojong"
 elif laundry_choice == '2':
     print("Mengikuti Laundry Soang")
-    client.subscribe("soang")
+    topik = "Soang"
 
-client.loop_stop()
+client.subscribe(topik)
 
 service_type = get_service_type()
 processing_time_choice = get_processing_time(service_type)
@@ -96,18 +101,17 @@ elif service_type == '2':  # Jika cuci kering
 
 total_price = price_per_kg * total_weight
 
-# Dapatkan waktu saat ini
-current_time = datetime.datetime.now()
-
 print("===========================================================================")
-print(f"Detail Pesanan\nNama Pelanggan    : {customer_name}\nJenis Laundry     : {'Cuci Basah' if service_type == '1' else 'Cuci Kering'}"
-      f"\nTotal Berat       : {total_weight} kg\nTotal Harga       : Rp {total_price}")
+print(
+    f"Detail Pesanan\nNama Pelanggan    : {customer_name}\nJenis Laundry     : {'Cuci Basah' if service_type == '1' else 'Cuci Kering'}"
+    f"\nTotal Berat       : {total_weight} kg\nTotal Harga       : Rp {total_price}")
 print("===========================================================================")
 
-client.publish("waktu_penjemputan", current_time.strftime("%Y-%m-%d %H:%M:%S"))
-print(f"Pengambilan Baju di Laundry {'Bojong' if laundry_choice == '1' else 'Soang'} pada waktu:", current_time.strftime("%Y-%m-%d %H:%M:%S"))
+# client.publish('Bojong' if laundry_choice == '1' else 'Soang', current_time.strftime("%Y-%m-%d %H:%M:%S"))
+# print(f"Pengambilan Baju di Laundry {'Bojong' if laundry_choice == '1' else 'Soang'} pada waktu:", current_time.strftime("%Y-%m-%d %H:%M:%S"))
 
-delivery_time = current_time + datetime.timedelta(days=int(processing_time_choice))
-client.publish("waktu_pengantaran", delivery_time.strftime("%Y-%m-%d %H:%M:%S"))
-print(f"Pengantaran Baju di Laundry {'Bojong' if laundry_choice == '1' else 'Soang'} pada waktu:", delivery_time.strftime("%Y-%m-%d %H:%M:%S"))
-print("===========================================================================")
+pesan = (current_time + datetime.timedelta(days=1)).strftime("%Y-%m-%d %H:%M:%S")
+client.publish(topik, pesan)
+
+time.sleep(30)
+client.loop_stop()
